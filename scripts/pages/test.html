@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Test</title>
+</head>
+<body>
+  <script>
+    async function getPhotographers() {
+      try {
+        const response = await fetch('../../data/photographers.json');
+        if (!response.ok) {
+          throw new Error('Erreur lors de la récupération des photographes');
+        }
+        const data = await response.json();
+        console.log(data);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+
+    getPhotographers();
+  </script>
+  test
+</body>
+</html>

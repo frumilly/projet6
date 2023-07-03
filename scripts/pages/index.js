@@ -1,4 +1,26 @@
-    async function getPhotographers() {
+async function getPhotographers() {
+    try {
+      // Effectuer la requête fetch pour récupérer le contenu du fichier photographers.json
+      const response = await fetch('../../data/photographers.json');
+      
+      // Vérifier si la requête a réussi
+      if (!response.ok) {
+        throw new Error('Erreur lors de la récupération des photographes');
+      }
+      
+      // Analyser la réponse JSON
+      const data = await response.json();
+  
+      // Retourner le tableau de photographes récupéré depuis le fichier JSON
+      return { photographers: data };
+    } catch (error) {
+      console.error(error);
+      // En cas d'erreur, retourner un tableau vide ou gérer l'erreur selon votre besoin
+      return { photographers: [] };
+    }
+  }
+  
+    async function getPhotographerstest() {
         // Ceci est un exemple de données pour avoir un affichage de photographes de test dès le démarrage du projet, 
         // mais il sera à remplacer avec une requête sur le fichier JSON en utilisant "fetch".
         let photographers = [
