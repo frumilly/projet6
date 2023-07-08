@@ -1,4 +1,5 @@
 function photographerTemplate(data) {
+  // eslint-disable-next-line
   const { name, portrait, city, country, tagline, price } = data;
 
   const picture = `assets/photographers/${portrait}`;
@@ -65,9 +66,7 @@ async function displayData(photographers) {
 async function init() {
   // Récupère les données des photographes
   const response = await getPhotographers();
-  console.log(response);
   const photographers3 = response.photographers;
-  console.log(photographers3.photographers);
   // Obtenir le tableau des photographes depuis la propriété "photographers" de la réponse
   displayData(photographers3.photographers);
 }
