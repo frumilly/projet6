@@ -6,57 +6,19 @@ function getQueryParam() {
   return name;
 }
 function photographerTemplate2(data) {
-  const { name, portrait, city, tag } = data;
+  const { name, portrait } = data;
   const picture = `assets/photographers/${portrait}`;
 
   function getUserCardDOM() {
-    const section = document.createElement('section');
-    section.setAttribute('id', 'profil');
-
-    const contentDiv = document.createElement('div');
-    contentDiv.classList.add('photographer_content');
-
-    const h1 = document.createElement('h1');
-    h1.textContent = name;
-
-    const localP = document.createElement('p');
-    localP.classList.add('content_local');
-    localP.textContent = city;
-
-    const tagP = document.createElement('p');
-    tagP.classList.add('content_tag');
-    tagP.textContent = tag;
-
-    contentDiv.appendChild(h1);
-    contentDiv.appendChild(localP);
-    contentDiv.appendChild(tagP);
-
-    const buttonDiv = document.createElement('div');
-    buttonDiv.classList.add('button_contact');
-
-    const button = document.createElement('button');
-    button.classList.add('contact_button');
-    button.textContent = 'Contactez-moi';
-    button.setAttribute('onclick', 'displayModal()');
-    button.setAttribute('tabindex', '0');
-
-    buttonDiv.appendChild(button);
-
-    const coverDiv = document.createElement('div');
-    coverDiv.classList.add('cover');
-
+    const article = document.createElement('article');
     const img = document.createElement('img');
     img.setAttribute('src', picture);
-
-    coverDiv.appendChild(img);
-
-    section.appendChild(contentDiv);
-    section.appendChild(buttonDiv);
-    section.appendChild(coverDiv);
-
-    return section;
+    const h2 = document.createElement('h2');
+    h2.textContent = name;
+    article.appendChild(img);
+    article.appendChild(h2);
+    return article;
   }
-
   return { name, picture, getUserCardDOM };
 }
 
@@ -105,7 +67,6 @@ async function getPhotographerMedia(photographerId) {
     console.error(error);
     // En cas d'erreur, retourner un tableau vide ou gérer l'erreur selon votre besoin
     return [];
-
   }
 }
 
@@ -137,10 +98,6 @@ async function displayData2(photographers) {
         `;
       photographersSection.appendChild(mediaCard);
     });
-  }
-  else {
-    // Redirection vers la page d'accueil 
-    window.location.href = 'index.html'; 
   }
 }
 

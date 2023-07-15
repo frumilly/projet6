@@ -1,0 +1,9 @@
+<script>
+function getQueryParam() {
+  var str = new URL(window.location.href);
+var url = new URL(str);
+var name = url.searchParams.get("id");
+return name;
+}
+console.log(getQueryParam());
+</script>

@@ -1,16 +1,22 @@
+// Fonction qui génère un DOM pour une carte utilisateur de photographe
+// à partir des données fournies
 function photographerTemplate(data) {
   // eslint-disable-next-line
-  const { name, portrait, city, country, tagline, price } = data;
+  const { name, portrait, city, country, tagline, price,id } = data;
 
   const picture = `assets/photographers/${portrait}`;
   function getUserCardDOM() {
     const article = document.createElement('article');
+    const infoDiv = document.createElement('div');
+    const a = document.createElement('a'); // Ajout de l'élément <a>
+    a.setAttribute('href', `photographer.html?id=${id}`);
+    a.setAttribute('aria-label', `Photo de ${name}`);
     const img = document.createElement('img');
     img.setAttribute('src', picture);
-    img.setAttribute('alt', name); // Ajoutez cet attribut alt pour décrire l'image
+    img.setAttribute('alt', `Photo de ${name}`);
+    a.appendChild(img);
     const h2 = document.createElement('h2');
     h2.textContent = name;
-    h2.setAttribute('aria-label', name);
     const pLocation = document.createElement('p');
     pLocation.textContent = `${city}, ${country}`;
     pLocation.id = 'plocation';
@@ -20,18 +26,19 @@ function photographerTemplate(data) {
     const pPrice = document.createElement('p');
     pPrice.textContent = ` ${price}€/jour`;
     pPrice.id = 'p-price';
-
-    article.appendChild(img);
+    infoDiv.class = 'info';
+    infoDiv.setAttribute('tabindex', '0');
+    infoDiv.appendChild(pLocation);
+    infoDiv.appendChild(pTagline);
+    infoDiv.appendChild(pPrice);
+    article.appendChild(a);
     article.appendChild(h2);
-    article.appendChild(pLocation);
-    article.appendChild(pTagline);
-    article.appendChild(pPrice);
-
+    article.appendChild(infoDiv);
     return article;
   }
   return { name, picture, getUserCardDOM };
 }
-
+// Fonction qui récupère les données des photographes depuis un fichier JSON
 async function getPhotographers() {
   try {
     // Effectuer la requête fetch pour récupérer le contenu du fichier photographers.json
@@ -54,6 +61,7 @@ async function getPhotographers() {
   }
 }
 
+// Fonction qui affiche les données des photographes dans le DOM (Document Object Model)
 async function displayData(photographers) {
   const photographersSection = document.querySelector('.photographer_section');
   photographers.forEach((photographer) => {
@@ -62,7 +70,7 @@ async function displayData(photographers) {
     photographersSection.appendChild(userCardDOM);
   });
 }
-
+// Fonction d'initialisation qui récupère les données des photographes et les affiche
 async function init() {
   // Récupère les données des photographes
   const response = await getPhotographers();
