@@ -1,8 +1,9 @@
+const firstnameInput = document.getElementById('firstname');
 async function getPhotographerName() {
   try {
     const str = new URL(window.location.href);
     const url = new URL(str);
-    const photographerId = parseInt(url.searchParams.get('id'));
+    const photographerId = parseInt(url.searchParams.get('id'), 10);
 
     const response = await fetch('../../data/photographers.json');
 
@@ -16,11 +17,9 @@ async function getPhotographerName() {
     // Trouver le photographe avec l'ID correspondant
     const foundPhotographer = data.photographers.find((p) => p.id === photographerId);
     const res = foundPhotographer.name;
-     console.log(res);
     // Retourner le nom du photographe
     return res;
   } catch (error) {
-    console.error(error);
     return '';
   }
 }
@@ -33,16 +32,17 @@ function hideModalOverlay() {
   const modalOverlay = document.querySelector('.modal-overlay');
   modalOverlay.style.display = 'none';
 }
+// eslint-disable-next-line
 async function displayModal() {
   const photographerName = await getPhotographerName();
-  console.log(photographerName);
   const modal = document.getElementById('contact_modal');
   const photographerNameElement = modal.querySelector('#photographer_name');
   photographerNameElement.textContent = photographerName;
   modal.style.display = 'block';
+  firstnameInput.focus();
   displayModalOverlay();
 }
-
+// eslint-disable-next-line
 function closeModal() {
   const modal = document.getElementById('contact_modal');
   modal.style.display = 'none';

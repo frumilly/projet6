@@ -19,13 +19,13 @@ function photographerTemplate(data) {
     h2.textContent = name;
     const pLocation = document.createElement('p');
     pLocation.textContent = `${city}, ${country}`;
-    pLocation.id = 'plocation';
+    pLocation.classList.add('plocation');
     const pTagline = document.createElement('p');
     pTagline.textContent = ` ${tagline}`;
-    pTagline.id = 'ptag';
+    pTagline.classList.add('ptag');
     const pPrice = document.createElement('p');
     pPrice.textContent = ` ${price}€/jour`;
-    pPrice.id = 'p-price';
+    pPrice.classList.add('p-price');
     infoDiv.class = 'info';
     infoDiv.setAttribute('tabindex', '0');
     infoDiv.appendChild(pLocation);

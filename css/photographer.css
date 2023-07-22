@@ -31,6 +31,7 @@
     justify-content: space-between;
     padding: 35px;
     margin: auto;
+    height:100px;
 }
 
 .modal header {
@@ -43,9 +44,9 @@
 }
 
 .modal header h2 {
-    font-size: 64px;
-    font-weight: normal;
-    margin-top: 40px;
+    font-size: 50px;
+    font-weight:  bold;
+    margin-top: 80px;
 }
 
 form {
@@ -73,4 +74,5 @@ form input {
     height: 68px;
     border: none;
     border-radius: 5px;
+    font-size: 35px;
 }
