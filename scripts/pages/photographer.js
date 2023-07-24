@@ -6,6 +6,48 @@ function getQueryParam() {
   return name;
 }
 
+// la lightbox
+// Index du média actuellement affiché dans la lightbox
+let currentMediaIndex = 0;
+
+// Tableau des médias pour la lightbox
+let lightboxMedia = [];
+
+// Fonction pour changer de média dans la lightbox
+async function changeMedia(offset) {
+  // Mettre à jour l'index du média actuel en tenant compte des limites
+  currentMediaIndex += offset;
+  if (currentMediaIndex >= lightboxMedia.length) {
+    currentMediaIndex = 0;
+  } else if (currentMediaIndex < 0) {
+    currentMediaIndex = lightboxMedia.length - 1;
+  }
+
+  // Afficher le média suivant ou précédent dans la lightbox
+  const lightboxContent = document.querySelector('.lightbox-content');
+  const media = lightboxMedia[currentMediaIndex];
+  // eslint-disable-next-line
+  const response = await fetch('../../data/photographers.json');
+  const data = await response.json();
+  // eslint-disable-next-line
+  const photographerM = data.photographers.find((photographer) => photographer.id === media.photographerId);
+  // Vérifier si le média est une vidéo
+  if (media && media.video) {
+    lightboxContent.innerHTML = `<video controls><source src="assets/images/${photographerM.name}/${media.video}" type="video/mp4"></video>`;
+  } else {
+    lightboxContent.innerHTML = `<img src="assets/images/${photographerM.name}/${media.image}" alt="${media.title}">`;
+  }
+  lightboxContent.style.display = 'flex';
+
+  // Trouver l'index du média actuel dans le tableau
+  currentMediaIndex = lightboxMedia.findIndex((item) => item.id === media.id);
+}
+// Fonction pour fermer la lightbox
+// eslint-disable-next-line
+function closeLightbox() {
+  const lightbox = document.getElementById('lightbox');
+  lightbox.style.display = 'none';
+}
 // les donnée concernant le photographe
 function photographerTemplatePh(data) {
   // eslint-disable-next-line
@@ -191,19 +233,30 @@ async function displayDataPh(photographers) {
     // eslint-disable-next-line
     sortedMedia.forEach((media) => {
       // eslint-disable-next-line
-      const { title, image, likes, price } = media;
+      const { title, image, likes, price, video, vignette } = media;
 
       const mediaCard = document.createElement('div');
       mediaCard.classList.add('media_card');
 
       const link = document.createElement('a');
-      link.href = '';
+      // eslint-disable-next-line
+      link.href = 'javascript:void(0)';
 
-      const img = document.createElement('img');
-      img.src = `assets/images/${photographer.name}/${image}`;
-      img.alt = title;
-
-      link.appendChild(img);
+      link.addEventListener('click', () => {
+        // Appelle la fonction pour afficher la lightbox
+        displayLightbox(media);
+      });
+      if (video) {
+        const img = document.createElement('img');
+        img.src = `assets/images/${photographer.name}/${vignette}`;
+        img.alt = title;
+        link.appendChild(img);
+      } else {
+        const img = document.createElement('img');
+        img.src = `assets/images/${photographer.name}/${image}`;
+        img.alt = title;
+        link.appendChild(img);
+      }
 
       const mediaContentDiv = document.createElement('div');
       mediaContentDiv.classList.add('media_content');
@@ -251,23 +304,22 @@ async function displayDataPh(photographers) {
   const sortedMedia = media.sort((a, b) => b.likes - a.likes);
   // eslint-disable-next-line
   sortedMedia.forEach((media) => { // eslint-disable-next-line
-    const { title, image, video, likes, price } = media;
+    const { title, image, video, likes, price, vignette } = media;
 
     const mediaCard = document.createElement('div');
     mediaCard.classList.add('media_card');
 
     const link = document.createElement('a');
-    link.href = '';
+    // eslint-disable-next-line
+    link.href = 'javascript:void(0)';
+    link.addEventListener('click', () => {
+      // Appelle la fonction pour afficher la lightbox
+      displayLightbox(media);
+    });
     if (video) {
-      const videoElement = document.createElement('video');
-      videoElement.controls = false; // Pour cacher les boutons de contrôle
-      videoElement.src = `assets/images/${photographer.name}/${video}`;
       const img = document.createElement('img');
-      img.src = `assets/images/${photographer.name}/${image}`;
+      img.src = `assets/images/${photographer.name}/${vignette}`;
       img.alt = title;
-      videoElement.poster = `assets/images/${photographer.name}/${image}`;
-
-      link.appendChild(videoElement);
       link.appendChild(img);
     } else {
       const img = document.createElement('img');
@@ -346,6 +398,42 @@ async function displayDataPh(photographers) {
 async function initPhotographe() {
   const photographers = await getMedia();
   displayDataPh(photographers);
+}
+
+async function displayLightbox(media) {
+  const lightbox = document.getElementById('lightbox');
+  const lightboxContent = lightbox.querySelector('.lightbox-content');
+
+  try {
+    const response = await fetch('../../data/photographers.json');
+    const data = await response.json();
+    // eslint-disable-next-line
+    const photographerM = data.photographers.find((photographer) => photographer.id === media.photographerId);
+    lightboxMedia = await getPhotographerMedia(media.photographerId);
+    // Récupérer la valeur du select
+    const sortSelector = document.getElementById('sort-selector');
+    const selectedOption = sortSelector.value;
+    // Tri des médias en fonction de l'option sélectionnée
+    if (selectedOption === 'popularity') {
+      lightboxMedia.sort((a, b) => b.likes - a.likes);
+    } else if (selectedOption === 'date') {
+      lightboxMedia.sort((a, b) => new Date(a.date) - new Date(b.date));
+    } else if (selectedOption === 'title') {
+      lightboxMedia.sort((a, b) => a.title.localeCompare(b.title));
+    }
+    // Vérifier si le média est une vidéo
+    if (media.video) {
+      lightboxContent.innerHTML = `<video controls><source src="assets/images/${photographerM.name}/${media.video}" type="video/mp4"></video>`;
+    } else {
+      lightboxContent.innerHTML = `<img src="assets/images/${photographerM.name}/${media.image}" alt="${media.title}">`;
+    }
+
+    lightbox.style.display = 'flex';
+    currentMediaIndex = lightboxMedia.findIndex((item) => item.id === media.id);
+  } catch (error) {
+    // eslint-disable-next-line
+    console.error('Erreur lors de la récupération des données :', error);
+  }
 }
 
 initPhotographe();

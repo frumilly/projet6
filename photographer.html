@@ -20,11 +20,14 @@
         <button class="contact_button" onclick="displayModal()" tabindex="0">Contactez-moi</button>
       </div> !-->
     <div class="media_section"></div>
-    <!-- HTML -->
-<div id="lightbox" class="lightbox" tabindex="-1">
-  <button id="closeButton">Fermer</button>
-  <div id="mediaContainer"></div>
-</div>
+    <div id="lightbox" class="lightbox">
+      <span class="lightbox-close" aria-label="close dialog"  onclick="closeLightbox()">&times;</span>
+      <div class="lightbox-content">
+        <!-- Contenu du média (image ou vidéo) -->
+      </div>
+      <button class="lightbox-prev" onclick="changeMedia(-1)" aria-label="Previous image">❮</button>
+  <button class="lightbox-next" onclick="changeMedia(1)" aria-label="Next image">❯</button>
+    </div>
 
   </main>
   <div class="modal-overlay"></div>
@@ -32,7 +35,7 @@
     <div class="modal">
       <header>
         <h2>Contactez-moi <br> <span id="photographer_name"></span></h2>
-        <img src="assets/icons/close.svg" onclick="closeModal()" />
+        <img src="assets/icons/close.svg" aria-label="close dialog" onclick="closeModal()" />
       </header>
       <form>
         <div>
@@ -56,7 +59,7 @@
   <script src="/scripts/pages/photographer.js"></script>
   <script src="/scripts/utils/contactForm.js"></script>
   <script src="/scripts/utils/valid_form.js"></script>
-  <script src="/scripts/utils/lightbox.js"></script>
+ 
 </body>
 
 </html>
