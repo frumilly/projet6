@@ -34,6 +34,7 @@ function hideModalOverlay() {
 }
 // eslint-disable-next-line
 async function displayModal() {
+  document.documentElement.classList.add('overflow-hidden');
   const photographerName = await getPhotographerName();
   const modal = document.getElementById('contact_modal');
   const photographerNameElement = modal.querySelector('#photographer_name');
@@ -42,9 +43,29 @@ async function displayModal() {
   firstnameInput.focus();
   displayModalOverlay();
 }
+const formSauv = document.forms.contactForm;
+function resetFormulaire() {
+  formSauv.reset();
+}
+function clearErrorMessages() {
+  const errorMessages = document.querySelectorAll('.small-error-message');
+  // eslint-disable-next-line
+  errorMessages.forEach(function (errorMessage) {errorMessage.textContent = ''; });
+}
 // eslint-disable-next-line
 function closeModal() {
+  document.documentElement.classList.remove('overflow-hidden');
   const modal = document.getElementById('contact_modal');
   modal.style.display = 'none';
   hideModalOverlay();
+  resetFormulaire();
+  clearErrorMessages();
 }
+
+// eslint-disable-next-line
+document.querySelector('.modal img[aria-label="close dialog"]').addEventListener('keydown', function (event) {
+  // Vérifier si la touche pressée est "Enter" (Entrée)
+  if (event.key === 'Enter') {
+    closeModal(); // Fermer la modale lorsque la touche Entrée est pressée sur la croix
+  }
+});

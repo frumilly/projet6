@@ -21,12 +21,12 @@
       </div> !-->
     <div class="media_section"></div>
     <div id="lightbox" class="lightbox">
-      <span class="lightbox-close" aria-label="close dialog"  onclick="closeLightbox()">&times;</span>
+      <span class="lightbox-close" alt="close" aria-label="close dialog" tabindex="0" onclick="closeLightbox()">&times;</span>
       <div class="lightbox-content">
         <!-- Contenu du média (image ou vidéo) -->
       </div>
-      <button class="lightbox-prev" onclick="changeMedia(-1)" aria-label="Previous image">❮</button>
-  <button class="lightbox-next" onclick="changeMedia(1)" aria-label="Next image">❯</button>
+      <button class="lightbox-prev" tabindex="0" onclick="changeMedia(-1)" aria-label="Previous image">❮</button>
+      <button class="lightbox-next" tabindex="0" onclick="changeMedia(1)" aria-label="Next image">❯</button>
     </div>
 
   </main>
@@ -35,31 +35,38 @@
     <div class="modal">
       <header>
         <h2>Contactez-moi <br> <span id="photographer_name"></span></h2>
-        <img src="assets/icons/close.svg" aria-label="close dialog" onclick="closeModal()" />
+        <img src="assets/icons/close.svg" tabindex="0" aria-label="close dialog" onclick="closeModal()" />
       </header>
-      <form>
+      <form name="contactForm" novalidate>
         <div>
-          <label  for="form-firstname">Prénom</label>
-          <input type="text" name="firstname" id="firstname" aria-labelledby="label-form-firstname" required
-            minlength="2">
-          <label   for="form-lastname">Nom</label>
-          <input type="text" name="lastname" id="lastname" aria-labelledby="label-form-lastname" required
-            minlength="2">
-          <label   for="form-email">Email</label>
-          <input type="email" name="email" id="mail" aria-labelledby="label-form-email" required>
-          <label for="form-message">Votre message</label>
-          <textarea name="message" id="message" rows="10" cols="80" placeholder=" " aria-labelledby="label-form-message"
-            required minlength="10"></textarea>
-         
+          <label for="firstname">Prénom</label>
+          <input type="text" name="firstname" id="firstname" minlength="2" aria-required="true">
+          <div class="error-container">
+            <p id="firstname-error" class="small-error-message"></p>
+          </div>
+
+          <label for="lastname">Nom</label>
+          <input type="text" name="lastname" id="lastname" minlength="2" aria-required="true">
+          <p id="lastname-error" class="small-error-message"></p>
+
+          <label for="email">Email</label>
+          <input type="email" name="email" id="email" aria-required="true">
+          <p id="email-error" class="small-error-message"></p>
+
+          <label for="message">Votre message</label>
+          <textarea name="message" id="message" rows="10" cols="80" placeholder=" " minlength="100" aria-required="true"></textarea>
+          <div class="error-container">
+            <p id="message-error" class="small-error-message"></p>
+          </div>
         </div>
-        <button class="contact_button" aria-label="Envoyer le message">Envoyer</button>
+        <button id="modalB" class="contact_button" aria-label="Envoyer le message">Envoyer</button>
       </form>
     </div>
   </div>
   <script src="/scripts/pages/photographer.js"></script>
   <script src="/scripts/utils/contactForm.js"></script>
   <script src="/scripts/utils/valid_form.js"></script>
- 
+
 </body>
 
 </html>

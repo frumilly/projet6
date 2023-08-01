@@ -1,47 +1,56 @@
 /* eslint-disable */
-const lightbox = document.getElementById('lightbox');
-const mediaContainer = document.getElementById('mediaContainer');
-const closeButton = document.getElementById('closeButton');
-const mediaData = [
-  { type: 'image', src: 'chemin_vers_image1.jpg', title: 'Image 1' },
-  { type: 'video', src: 'chemin_vers_video1.mp4', title: 'Vidéo 1' },
-]; 
-let currentIndex = 0;
-function openLightbox(index) {
-    currentIndex = index;
-  const media = mediaData[index];
-  if (media.type === 'image') {
-    const imgElement = document.createElement('img');
-    imgElement.src = media.src;
-    mediaContainer.innerHTML = '';
-    mediaContainer.appendChild(imgElement);
-  } else if (media.type === 'video') {
-    const videoElement = document.createElement('video');
-    videoElement.src = media.src;
-    videoElement.setAttribute('controls', 'controls');
-    mediaContainer.innerHTML = '';
-    mediaContainer.appendChild(videoElement);
+
+// Fonction pour afficher la lightbox
+function openLightbox(mediaUrl) {
+  document.body.classList.add('lightbox-open'); 
+  const lightbox = document.getElementById('lightbox');
+  const lightboxContent = document.getElementById('lightboxContent');
+
+  // Effacer le contenu précédent de la lightbox
+  lightboxContent.innerHTML = '';
+
+  if (mediaUrl.endsWith('.mp4')) {
+    // Si c'est une vidéo, créer une balise <video>
+    const video = document.createElement('video');
+    video.controls = true; // Afficher les contrôles vidéo (play, pause, etc.)
+    video.src = mediaUrl;
+    lightboxContent.appendChild(video);
+  } else {
+    // Sinon, c'est une image, créer une balise <img>
+    const img = document.createElement('img');
+    img.src = mediaUrl;
+    img.alt = 'Média de la lightbox';
+    lightboxContent.appendChild(img);
   }
+
+  // Afficher la lightbox
   lightbox.style.display = 'block';
 }
 
-function closeLightbox() {
-  lightbox.style.display = 'none';
-  mediaContainer.innerHTML = '';
-}
-
-// Ajoutez des gestionnaires d'événements sur les images et vidéos pour ouvrir la lightbox
-mediaData.forEach((media, index) => {
-  const element = document.createElement(media.type === 'image' ? 'img' : 'video');
-  element.src = media.src;
-  element.alt = media.title;
-  element.addEventListener('click', () => openLightbox(index));
-  // Ajoutez cet élément dans votre page où vous souhaitez afficher les médias
-  document.body.appendChild(element);
+// Gestionnaire d'événement pour le clic sur une image ou une vidéo
+portfolioSection.addEventListener('click', (event) => {
+  const clickedElement = event.target;
+  const mediaUrl = clickedElement.getAttribute('src') || clickedElement.getAttribute('data-src');
+  if (mediaUrl) {
+    openLightbox(mediaUrl);
+  }
 });
 
-closeButton.addEventListener('click', closeLightbox);
+// Gestionnaire d'événement pour le clic sur le bouton de fermeture de la lightbox
+const closeButton = document.getElementById('closeButton');
+closeButton.addEventListener('click', () => {
+  const lightbox = document.getElementById('lightbox');
+  lightbox.style.display = 'none';
+});
 
-// Ajoutez les gestionnaires d'événements pour naviguer entre les médias (suivant/précédent)
-// Vous pouvez utiliser currentIndex pour suivre l'index du média actuellement affiché dans la lightbox
-// Assurez-vous de mettre à jour currentIndex lorsque l'utilisateur clique sur le bouton suivant ou précédent.
+const lightbox = document.getElementById('lightbox');
+
+
+  // Gestionnaire d'événement pour la touche "Échap"
+  document.forEach((element) => {
+    element.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        lightbox.style.display = 'none';
+      }
+    })
+  })

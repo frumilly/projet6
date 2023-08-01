@@ -1,85 +1,75 @@
 /* eslint-disable */
-// Récupérer la référence de l'élément bouton
 const submitButton = document.querySelector('.contact_button');
-let isValid = true;
-// Ajouter un gestionnaire d'événement pour l'événement 'click'
-submitButton.addEventListener('click', function (event) {
-  event.preventDefault();
-  const firstInput = document.getElementById('firstname');
-  // Récupérer la valeur saisie dans le champ
-  const value = firstInput.value.trim();
+    const formElement = document.forms.contactForm;
 
-  // Vérifier si la valeur a un minimum de 2 caractères et n'est pas vide
-  if (value.length < 2 || value == '') {
-    console.log('Le champ "first" est invalide.');
-    // Ajoutez ici le code à exécuter si le champ est invalide
-    isValid = false;
-  }
-  // Récupérer la référence de l'élément input du nom
-  const lastInput = document.getElementById('lastname');
+    // Ajouter un gestionnaire d'événement pour l'événement 'submit' du formulaire
+    formElement.addEventListener('submit', function (event) {
+      event.preventDefault();
+      clearErrorMessages();
 
-  // Récupérer la valeur saisie dans le champ du nom
-  const lastName = lastInput.value.trim();
+      const errors = [];
 
-  // Vérifier si le nom a un minimum de 2 caractères et n'est pas vide
-  if (lastName.length < 2 || lastName == '') {
-    console.log('Le champ "Nom" est invalide.');
-    isValid = false;
-  }
-  // Récupérer la référence de l'élément input de l'adresse électronique
-  const emailInput = document.getElementById('mail');
+      checkInput('firstname', 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.', errors);
+      checkInput('lastname', 'Veuillez entrer 2 caractères ou plus pour le champ du nom.', errors);
+      checkEmail('email', 'Email incorrect', errors);
+      checkMsg('message', 'Veuillez entrer 10 caractères ou plus pour le champ du message.', errors);
+      if (errors.length === 0) {
+        // Afficher toutes les informations dans la console
+        console.log('Informations valides :');
+        console.log('Prénom:', formElement.firstname.value.trim());
+        console.log('Nom:', formElement.lastname.value.trim());
+        console.log('Adresse électronique:', formElement.email.value.trim());
+        console.log('Message:', formElement.message.value.trim());
+        resetFormulaire();
+        formElement.style.display = "none";
+      } else {
+        // Afficher les messages d'erreur
+        errors.forEach(error => {
+          displayError(error.inputElement.id + '-error', error.errorMessage);
+        });
+      }
+    });
 
-  // Récupérer la valeur saisie dans le champ de l'adresse électronique
-  const emailA = emailInput.value.trim();
+    function checkInput(inputId, errorMessage, errors) {
+      const inputElement = document.getElementById(inputId);
+      const value = inputElement.value.trim();
+      if (!/^[A-Za-z]+$/.test(value) || value.length < 2 || value === '') {
+        errors.push({ inputElement, errorMessage });
+      }
+    }
+    function checkMsg(inputId, errorMessage, errors) {
+      const inputElement = document.getElementById(inputId);
+      const value = inputElement.value.trim();
+      if (!/^[A-Za-z]+$/.test(value) || value.length < 10 || value === '') {
+        errors.push({ inputElement, errorMessage });
+      }
+    }
+    function checkEmail(inputId, errorMessage, errors) {
+      const inputElement = document.getElementById(inputId);
+      const value = inputElement.value.trim();
+      if (!validateEmailFormat(value)) {
+        errors.push({ inputElement, errorMessage });
+      }
+    }
 
-  // Vérifier si l'adresse électronique est valide
-  if (!validateEmail(emailA)) {
-    console.log('L\'adresse électronique n\'est pas valide.');
-    isValid = false;
-  }
+    function validateEmailFormat(email) {
+      const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+      return emailRegex.test(email);
+    }
 
-  // Récupérer la référence de l'élément input
-  const message = document.getElementById('message');
-  // Récupérer la valeur saisie dans le champ
-  const valueMessage= message.value.trim();
+    function clearErrorMessages() {
+      const errorMessages = document.querySelectorAll('.small-error-message');
+      errorMessages.forEach(function (errorMessage) {
+        errorMessage.textContent = ''; // Efface le contenu de l'élément p
+      });
+    }
 
-  // Vérifier si la valeur a un minimum de 2 caractères et n'est pas vide
-  if (valueMessage.length < 2 || valueMessage == '') {
+    function displayError(errorElementId, errorMessage) {
+      const errorElement = document.getElementById(errorElementId);
+      errorElement.textContent = errorMessage;
+    }
 
-    console.log('Le champ "message" est invalide.');
-    isValid = false;
-  }
- 
-  if (isValid == true) {
-   // Afficher toutes les informations dans la console
-   console.log('Informations valides :');
-   console.log('Prénom:', value);
-   console.log('Nom:', lastName);
-   console.log('Adresse électronique:', emailA);
-
-
-    // Supprimer le formulaire
-    //formElement.remove();
-    //resetFormulaire();
-//formElement.style.display = "none";
- 
-  }
-
-});
-function validateEmail(email) {
-  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-  return emailRegex.test(email);
-}
-function clearErrorMessages() {
-  let errorMessages = document.querySelectorAll('.error-message');
-  errorMessages.forEach(function (errorMessage) {
-    errorMessage.remove();
-  });
-}
-
-
-let  formSauv = document.forms.reserve;
-function resetFormulaire() {
-  formSauv.reset();
-}
-
+    function resetFormulaire() {
+      formElement.reset();
+      clearErrorMessages();
+    }

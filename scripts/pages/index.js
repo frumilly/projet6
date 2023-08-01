@@ -27,7 +27,7 @@ function photographerTemplate(data) {
     pPrice.textContent = ` ${price}€/jour`;
     pPrice.classList.add('p-price');
     infoDiv.class = 'info';
-    infoDiv.setAttribute('tabindex', '0');
+    // infoDiv.setAttribute('tabindex', '0');
     infoDiv.appendChild(pLocation);
     infoDiv.appendChild(pTagline);
     infoDiv.appendChild(pPrice);
