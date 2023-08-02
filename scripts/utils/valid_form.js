@@ -9,8 +9,8 @@ const submitButton = document.querySelector('.contact_button');
 
       const errors = [];
 
-      checkInput('firstname', 'Veuillez entrer 2 caractères ou plus pour le champ du prénom.', errors);
-      checkInput('lastname', 'Veuillez entrer 2 caractères ou plus pour le champ du nom.', errors);
+      checkInput('firstname', 'Le format du prénom est non respecté', errors);
+      checkInput('lastname', 'Le format du nom est non respecté', errors);
       checkEmail('email', 'Email incorrect', errors);
       checkMsg('message', 'Veuillez entrer 10 caractères ou plus pour le champ du message.', errors);
       if (errors.length === 0) {
@@ -21,7 +21,9 @@ const submitButton = document.querySelector('.contact_button');
         console.log('Adresse électronique:', formElement.email.value.trim());
         console.log('Message:', formElement.message.value.trim());
         resetFormulaire();
-        formElement.style.display = "none";
+        const modal = document.getElementById('contact_modal');
+  modal.style.display = 'none';
+  hideModalOverlay();
       } else {
         // Afficher les messages d'erreur
         errors.forEach(error => {
@@ -33,7 +35,7 @@ const submitButton = document.querySelector('.contact_button');
     function checkInput(inputId, errorMessage, errors) {
       const inputElement = document.getElementById(inputId);
       const value = inputElement.value.trim();
-      if (!/^[A-Za-z]+$/.test(value) || value.length < 2 || value === '') {
+      if (!/^[A-Za-z]+$/.test(value) || value.length < 1 || value === '') {
         errors.push({ inputElement, errorMessage });
       }
     }

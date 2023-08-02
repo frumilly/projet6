@@ -1,4 +1,17 @@
 const firstnameInput = document.getElementById('firstname');
+function hideOtherDivs() {
+  const mediaDivs = document.querySelectorAll('.media_section, .lightbox');
+  mediaDivs.forEach((div) => {
+    div.setAttribute('aria-hidden', 'true');
+  });
+}
+
+function showOtherDivs() {
+  const mediaDivs = document.querySelectorAll('.media_section, .lightbox');
+  mediaDivs.forEach((div) => {
+    div.removeAttribute('aria-hidden');
+  });
+}
 async function getPhotographerName() {
   try {
     const str = new URL(window.location.href);
@@ -34,6 +47,7 @@ function hideModalOverlay() {
 }
 // eslint-disable-next-line
 async function displayModal() {
+  hideOtherDivs();
   document.documentElement.classList.add('overflow-hidden');
   const photographerName = await getPhotographerName();
   const modal = document.getElementById('contact_modal');
@@ -54,6 +68,7 @@ function clearErrorMessages() {
 }
 // eslint-disable-next-line
 function closeModal() {
+  showOtherDivs();
   document.documentElement.classList.remove('overflow-hidden');
   const modal = document.getElementById('contact_modal');
   modal.style.display = 'none';
