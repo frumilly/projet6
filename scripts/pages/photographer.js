@@ -42,8 +42,6 @@ async function changeMedia(offset) {
 
   // Trouver l'index du média actuel dans le tableau
   currentMediaIndex = lightboxMedia.findIndex((item) => item.id === media.id);
-  lightboxMedia.setAttribute('role', 'dialog'); // Ajout de l'attribut role="dialog"
-  lightboxMedia.setAttribute('aria-describedby', 'lightbox-description');
 }
 // Fonction pour fermer la lightbox
 // eslint-disable-next-line

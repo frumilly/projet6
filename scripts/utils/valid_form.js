@@ -24,6 +24,7 @@ const submitButton = document.querySelector('.contact_button');
         const modal = document.getElementById('contact_modal');
   modal.style.display = 'none';
   hideModalOverlay();
+  document.documentElement.classList.remove('overflow-hidden');
       } else {
         // Afficher les messages d'erreur
         errors.forEach(error => {
